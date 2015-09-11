@@ -1,0 +1,109 @@
+/*
+ * Design the data structure for a set of cards. Explain how you would subclass the data structure to implement blackjack.
+ */
+
+ Classes: Card, Deck, Hand
+
+ public Enum Suit{
+ 	DIAMOND, HEART, CLUBS, SPADES;
+ }
+
+ public class Card{
+ 	Suit suit;
+ 	int rank;
+ }
+
+ public class Deck{
+ 	public ArrayList<Card> cards;
+ 	public void shuffle(){
+
+ 	}
+ 	public Card draw(){
+
+ 	}
+
+ }
+
+/*
+ * A subset of cards hold by a player.	
+ */
+public abstract class Hand{
+	public ArrayList<Card> cards;
+	public int abstract score();
+}
+
+public class BlackJackGame{
+	public ArrayList<Hand> hands;
+	init();
+	int index = 0;
+	Scanner sc = new Scanner(System.in);
+	public void play(){
+		while(!allDone()){
+		Hand hand = hands.get(index % hands.size());
+			System.out.println("Want to get more Card?");
+			String in = sc.next();
+			if(in.equals("Yes")){
+				hand.getCard();
+
+			}else{
+				hand.setIamDone();
+			}
+		}
+		}
+		judge();
+	}
+	
+	public void judge(){
+		int maxScore;
+		for(Hand hand : hands){
+			if(hand.isOver()){
+				continue;
+			}
+			maxScore = Math.max(maxScore, hand.getScore());
+		}
+		for(Hand hand : hands){
+			if(hand.getScore() == maxScore){
+				if(maxScore == 21){
+					System.out.println("Black Jack!");
+				}
+				System.out.println(hand.getNameOfPlayer() + "win!");
+			}
+		}
+	}
+	public boolean allDone(){
+		for(Hand hand : hands){
+			if(!hand.iAmDone){
+				return false;
+			}
+		}
+		return true;
+	}
+}
+
+public class BlackJackHand extends Hand{
+	public Deck deck;
+	public string nameOfPlayer;
+	public boolean iAmDone;
+	public int getScore(){
+		int socres = 0;
+		for(Card card : cards){
+			scores += card.rank;
+		}
+		return scores;
+	}
+	
+	public boolean isOver(){
+		return score() > 21;
+	}
+	public void getCard(){
+		cards.add(deck.draw());
+	}
+	public void setIamDone(){
+		iAmDone = true;
+	}
+} 
+
+
+
+
+
