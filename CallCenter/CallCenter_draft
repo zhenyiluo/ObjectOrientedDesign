@@ -1,0 +1,67 @@
+/*
+ * Call center with three levels of employees. 
+ * 1. Respondent 2. Manager 3. Director
+ * Implement a method dispatchCall() which assigns a call to the first available employee.
+ */
+
+ public class CallCenter{
+ 	List<Respondent> respondents;
+ 	List<Manager> managers;
+ 	List<Director> directors;
+ 	public void dispatchCall(Request request){
+		for(Respondent respondent: respondents){
+			if(respondent.isAvailable()){
+				respondent.setAvailable();
+				respondent.processRequest(request);
+				return;
+			}
+		}
+
+		for(Manager manager: managers){
+			if(manager.isAvailable()){
+				manager.setUnAvailalbe();
+				manager.processRequest(request);
+				return;
+			}
+		}
+
+		for(Director director: directors){
+			if(director.isAvailable()){
+				director.setUnAvailable();
+				director.processRequest(request);
+				return;
+			}
+		}
+		System.out.println("Sorry, all the representatives are busy, please try again later");
+ 	}
+
+ }
+
+ public class Employee{
+ 	private boolean available;
+ 	public boolean isAvailable(){
+ 		return available;
+ 	}
+ 	public void setUnAvailable(){
+ 		available = false;
+ 	}
+ 	public void processRequest(Request request){
+ 		ProcessThread pThread = new ProcessThread(this);
+ 		pThread.start();
+ 	}
+ }
+ public calss Respondent extends Employee{};
+ public class Manager extends Employee{};
+ public class Director extends Employee{};
+
+ public class ProcessThread extends Thread{
+ 	Employee employee;
+ 	public ProcessThread(Employee aInEmployee){
+ 		employee = aInEmployee;
+ 	}
+ 	public void run(){
+		processRequest();
+		setAvailable();
+ 	}
+ }
+
