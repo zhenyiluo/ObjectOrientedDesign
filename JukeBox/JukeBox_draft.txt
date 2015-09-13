@@ -1,0 +1,95 @@
+// Design a musical jukebox using ood.
+
+// Discuss the system constraint and use cases
+
+// Make assumptions.
+
+// Outline system components: JukeBox, User, Artist, CD, PlayList, Song
+
+public class JukeBox{
+	
+	public JukeBox(CDPlayer cdPlayer, User user){
+
+	}
+
+}
+
+public class CDPlayer{
+	private Playlist playList;
+	private int volume;
+	public void getPlayList(){
+
+	}
+
+	public void setPlayList(){
+
+	}
+
+	public void playSong(Song song){
+		// play this song
+	}
+
+	public void play(){
+		Song song = playList.getCurrentSong()
+		playSong(song);
+	}
+
+	public void stop(){
+
+	}
+
+	public void increaseVolume(){
+
+	}
+
+	public void decreaseVolume(){
+
+	}
+
+	public void nextSong(){
+
+	}
+}
+
+public class PlayList{
+	private int currentIndex;
+	private List<Song> playList;
+
+	public void addToPlayList(Song song){
+		playList.add(song);
+	}
+
+	public void removeFromPlayList(){
+		playList.remove(current);
+	}
+
+	public void moveToNextSong(){
+		currentIndex ++;
+	}
+
+	public void moveToPreviousSong(){
+		currentIndex --;
+	}
+
+	public void getCurrentSong(){
+		return playList.get(currentIndex);
+	}
+}
+
+public class CD{
+	private List<Song> songs;
+}
+
+public class Song{
+	private Artist artist;
+	private String name;
+}
+
+public class Artist{
+	private String firstName;
+	private Stirng lastName;
+}
+
+public class User{
+	
+}
