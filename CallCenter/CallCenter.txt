@@ -1,0 +1,134 @@
+public abstract class Employee{
+	private String firstName;
+	private String lastName;
+	private String phoneNumber;
+	private String email;
+	private String address;
+	private long id;
+	private Rank rank;
+	// getters and setters...
+	private currentCall = null;
+
+	public void receiveCall(Call call){
+		currentCall = call;
+		// starts Conversation
+	}
+
+	public boolean assignNewCall(){
+		if(!isFree()){
+			return false;
+		}
+		return CallHandler.getInstance().dispatchCall(this);
+	}
+
+	public void callCompleted(){
+		if(currentCall != null){
+			currentCall.disconnect();
+			currentCall = null;
+		}
+		assignNewCall();
+	}
+
+	public void escalateAndReassign(){
+		if(currentCall != null){
+			currentCall.incrementRank();
+			CallHandler.getInstance().dispatchCall(currentCall);
+			currentCall = null;
+		}
+		assignNewCall();
+	}
+	
+}
+
+public enum Rank{
+	Respondent (0);
+	Manager (1);
+	Director (2);
+	private int value;
+	private Rank(int v){
+		value = v;
+	}
+	private getValue(){
+		return value;
+	}
+}
+
+public class Director extends Employee{
+	public Director(){
+		setRank(Rank.Director);
+	}
+}
+
+public class Manager extends Employee{
+	public Manager(){
+		setRank(Rank.Manager);
+	}
+}
+
+public class Respondent extends Employee{
+	public Respondent(){
+		setRank(Rank.Respondent);
+	}
+}
+
+public class Call {
+	private Employee handler;
+	private Caller caller;
+	public void setHandler(Employee em){
+		handler = em;
+	}
+
+	public void incrementRank(Rank rank){
+		if(rank == Rank.Respondent){
+			rank = Rank.Manager;
+		}else if(rank == Rank.Manager){
+			rank = Rank.Director;
+		}
+
+		return rank;
+	}
+}
+
+public class CallHandler{
+	private static CallHanderler instance;
+	private List<List<Call>> queues;
+	public static getInstance(){
+		if(instance == null){
+			instance = new CallHander;
+		}
+		return instance;
+	}
+	
+	public void dispatchCall(Caller caller){
+		Call call = new Call(caller);
+		dispatchCall(call);
+	}
+
+	public void dispatchCall(Call call){
+		Employee em = getNextAvailableEmployee();
+		if(em == null){
+			queues.get(call.getRank().getValue()).add(call);
+		}else{
+			em.receiveCall(call);
+			call.setHandler(em);
+		}
+	}
+
+	public boolean assignCall(Employee ee){
+		for(int i = ee.getRank().getValue(); i >= 0; i--){
+			List<Call> queue = queues.get(i);
+			if(queue.isEmpty){
+				continue;
+			}else{
+				Call call = queue.remove(0);
+				ee.receiveCall(call);
+				return true;
+			}
+		}
+		return false;
+	}
+}
+
+
+
+
