@@ -1,0 +1,98 @@
+// Desigin a parking lot using ood.
+
+// Discuss system constraint and use case:
+// Multiple levels of parking, one entrance, one exit
+
+public enum VSIZE{
+	
+}
+public abstract class Vehicle{
+	String plate;
+	VSIZE vSize;
+	String color;
+	String brand;
+
+}
+
+public class SmallCar extends Vehicle{
+	
+}
+
+public class MidCar extends Vehicle{
+	
+}
+
+public class LargeCar extends Vehicle{
+	
+}
+
+public class ParkingSpot{
+	private boolean available;
+
+	public ParkingSpot(){
+	}	
+}
+
+public class ParkingLot{
+	private int availablePS;
+	private int row;
+	private int column;
+	ParkingSpot[][] ps = new ParkingSpot[row][column];
+	setOccupy(int x, int y){
+
+	}
+	UnsetOccupy(int x, int y){
+
+	}
+}
+
+public class Level{
+	private ParkingSpot[] spots;
+	private int floor;
+	private int numberOfSpots;
+	private static int SPOTS_PER_ROW = 10;
+	public Level(int floor, int numberOfSpots){
+		this.floor = floor;
+		this.numberOfSpots = numberOfSpots;
+		spots = new ParkingSpot[numberOfSpots];
+		int largeSpots = numberOfSpots / 4;
+		int bikeSpots = numberOfSpots / 4;
+		int compactSpots = numberOfSpots - largeSpots - bikeSpots;
+		for(int i = 0; i < numberOfSpots; i++){
+			VSIZE sz = VSIZE.SMALL;
+			if(i < largeSpots){
+				sz = VSIZE.LARGE;
+			}else if(i < largeSpots + compactSpots){
+				sz = VSIZE.MIDUM;
+			}
+			int row = i / SPOTS_PER_ROW;
+			spots[i] = new ParkingSpot(row, sz, this, i);
+		}
+	}
+	public int finaNextAvailableParkingSpot(Vethicle v){
+		int spotsNeeded = v.getSpotsNeeded();
+		int lastRow = -1;
+		int spotsFound = 0;
+		for(int i = 0; i < spots.length; i++){
+			ParkingSpot ps = spots[i];
+			if(lastRow != ps.getRow()){
+				spotsFound = 0;
+				lastRow = ps.getRow();
+			}
+
+			if(v.canFit(ps)){
+				spotsFound ++;
+			}else{
+				spotsFound = 0;
+			}
+
+			if(spotsFound = spotsNeeded){
+				return i - (spotsNeeded - 1);
+			}
+		}
+
+		return -1;
+	}
+}
+
+
