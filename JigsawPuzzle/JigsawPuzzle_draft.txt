@@ -1,0 +1,113 @@
+// Design a jigsaw puzzle
+
+
+public class Board{
+	Piece[][] pieces;
+
+	public Board(int m, int n){
+		picecs = new Piece[m][n];
+	}
+}
+
+public enum Type{
+	CORNER;
+	SIDE;
+	INNER;
+}
+public class Piece{
+	private Type type;
+	public void setType(Type type){
+		this.type = type;
+	}
+	public Type getType(){
+		return type;
+	}
+	// the index could be 0 to 3, side[index] would face left, side[(index+1) %4] would face up, and so on.
+	int index;
+	
+	// Each side has a shape, -1, 0, 1
+	int[] sides;
+
+	public boolean fitsWith(Piece p2, int direct){
+	Piece p1 = this;
+	// if direct = 1 then p1 is on the left, p2 is on the right;
+	// if direct = 2 then p1 is on the up, p2 is in the down;
+	if(direct == 1){
+		int index1 = (p1.index+2) % 4;
+		int index2 = (p2.index) % 4;
+		if(index1 == 0 || index2 == 0){
+			return false;
+		}else if (index1 + index2 == 0){
+			return true;
+		}else{
+			return false;
+		}
+	}else if(direct ==2){
+		int index1 = (p1.index + 3) % 4;
+		int index2 = (p2.index + 1) % 4;
+		if(index1 == 0 || index2 == 0){
+			return false;
+		}else if(index1 + index2 == 0){
+			return true;
+		}else{
+			return false;
+		}
+
+	}
+}
+	public void checkAndSetPieceType(){
+		int count = 0;
+		for(int i = 0; i < 4; i++){
+			if(sides[i] == 0){
+				count ++;
+			}
+		}
+		if(count == 0){
+			type = Type.INNER;
+		}else if(count == 1){
+			type = Type.SIDE;
+		}else{
+			type = Type.CORNER;
+		}
+	}
+}
+
+public class Game{
+	int m = 50; 
+	int n = 50;
+	Board board;
+	Piece[] randomPieces; 
+	ArrayList<Piece> corners;
+	ArrayList<Piece> sides;
+	ArrayList<Piece> inners;
+	public Game(Piece[] pieces, int m, int n){
+		randomPieces = pieces; 
+		board = new Board(m, n);
+	}
+
+	for(int i = 0; i < randomPieces; i++){
+		randomPieces[i].checkAndSetPieceType();
+		Type type = randomPieces[i].getType();
+		if(type == Type.CORNER){
+			conners.add(randomPieces[i]);
+		}else if(type == Type.SIDE){
+			sides.add(randomPieces[i]);
+		}else{
+			inners.add(randomPieces[i]);
+		}
+	}
+
+	tryWithCorners();
+	tryWithSides();
+	public boolean tryWithInners(int i, int j, Piece p){
+		Piece up = board[i-1][j];
+		Piece left = board[i][j-1];
+		if(up.fitsWith(p) && left.fitwWith(p)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+}
+
+

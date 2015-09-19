@@ -1,0 +1,153 @@
+// Design the data structure for online book reader system.
+
+// System constriant and use cases. Assume just need basic functions.
+
+// Objects: Book, User, OnlineBookReaderSystem, Library, Display, UserManager
+public class OnlineBookReaderSystem{
+	private User activeUser;
+	private Book activeBook;
+	private Display display;
+	private UserManager userManager;
+	private Library library;
+	public OnlineBookReaderSystem(){
+		userManager = new UserManager();
+		display = new Display();
+		library = new Library();
+	}
+	public Library getLibrary(){
+		return library;
+	}
+	public Display getDisplay(){
+		return display;
+	}
+	public UserManager getUserManager(){
+		return userManager;
+	}
+	public User getActiveUser(){
+		return activeUser;
+	}
+	public setActiveUser(User user){
+		activeUser = user;
+		display.displayUser(activeUser);
+	}
+	public Book getActiveBook(){
+		return activeBook;
+	}
+	public setActiveBook(Book book){
+		activeBook = book;
+		display.displayBook(book);
+	}
+}
+
+public class Library{
+	private HashMap<Integer, Book> books;
+	public Book addBook(int id, String details){
+		if(books.containsKey(id)){
+			return null;
+		}
+		Book book = new Book(id, details);
+		books.put(id, book);
+		return book;
+	}
+	public boolean removeBook(int id){
+		if(!books.containsKey(id)){
+			return false;
+		}
+		books.remove(id);
+		return true;
+	}
+	public boolean removeBook(Book book){
+		return removeBook(book.getId());
+	}
+	public Book find(int id){
+		return books.get(id);
+	}
+}
+
+public class Book{
+	private int id;
+	private String details;
+	public Book(int id, String details){
+		this.id = id;
+		this.details = details;
+	}
+	public int getId(){
+		return id;
+	}
+}
+
+public class User{
+	private int id;
+	private int accountType;
+	private String details;
+	public User(int id, String details, int accountType){
+		this.id = id;
+		this.details = details;
+		this.accountType = accountType;
+	}
+	public int getId(){
+		return id;
+	}
+	public String getDetails(){
+		return details;
+	}
+	public void setDetails(String details){
+		this.details = details;
+	}
+	public int getAccountType(){
+		return accountType;
+	}
+	public void setAccountType(){
+		this.accountType = accountType;
+	}
+}
+
+public class Display{
+	private int currentPage;
+	private User activeUser;
+	private Book activeBook;
+	public void forward(){
+		currentPage++;
+		refreshPage();
+	}
+	public void backward(){
+		currentPage--;
+		refreshPage();
+	}
+	public void displayBook(Book book){
+		activeBook = book;
+		currentPage = 0;
+		refreshTitle();
+		refreshDetails();
+		refreshPage();
+	}
+	public void displayUser(User user){
+		activeUser = user;
+		refreshUserName();
+	}
+}
+
+public class UserManager{
+	private HashMap<Integer, User> users;
+	private User register(int id, String details, int accountType){
+		if(users.containsKey(id)){
+			return null;
+		}
+		User user = new User(id, details, accountType);
+		users.put(id, user);
+		return user;
+	}
+	private boolean deRegister(int id){
+		if(!users.containsKey(id)){
+			return false;
+		}
+		users.remove(id);
+		return true;
+	}
+	private boolean deRegister(User user){
+		return deRegister(user.getId());
+	}
+	public User find(int id){
+		return users.get(id);
+	}
+}
