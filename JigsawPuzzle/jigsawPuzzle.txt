@@ -1,0 +1,74 @@
+public class Piece{
+	Edge[] edges;
+	int sides;
+	public boolean isCorner(){
+		return sides == 2;
+	}
+}
+
+public class Edge{
+	public enum Type{
+		inner, outer, flat;
+	}
+	int index;
+	Piece parent;
+	Type type;
+	Edge attachedTo;
+	boolean fitsWith(Edge edge){...}
+}
+
+public class Puzzle{
+	Edge[] flats;
+	Edge[] inners;
+	Edge[] outers;
+	Piece[] conners;
+	public void solve(){
+		Piece piece = conners[0];
+		Edge edge = getExposedEdge(piece);
+		while(edge != null){
+			Type type = edge.type;
+			Edge[] edges = type == Type.inner? outers : inners;
+			for(Edge e : edges){
+				if(edge.fitsWith(e)){
+					edge.attachedTo(e);
+					e.attachedTo(edge);
+					edge = e;
+					removeFromList(edge);
+					removeFromList(e);
+					edge = getNextExposedEdge(edge);
+				}
+			}
+		}
+	}
+
+	public Edge getNextExposedEdge(Edge edge){
+		int index = (edge.index + 2) % 4;
+		Edge nextEdge = edge.parent.edges[index];
+		if(isExposed(nextEdge)){
+			return nextEdge;
+		}
+		return getExposedEdge(edge.parent);
+	}
+
+	public void removeFromList(Edge edge){
+		if(edge.type == Type.flat){
+			return;
+		}else{
+			Edges[] edges = edge.type == Type.inners ? inners : outers;
+			edges.remove(edge);
+		}
+	}
+
+	public Edge getExposedEdge(Piece piece){
+		for(Edge edge : picec.edges){
+			if(isExposed(edge)){
+				return edge;
+			}
+		}
+		return null;
+	}
+
+	public boolean isExposed(Edge edge){
+		return edge.type != Type.flat && edge.attachedTo != null;
+	}
+}
