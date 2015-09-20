@@ -1,1 +1,35 @@
 // Design chat server
+
+// GroupChat? Message, User, ChatWindow, MessageRequest
+
+public class MessageRequest{
+	User from;
+	User to;
+	Message message;
+}
+
+public class Message{
+	String content;
+	long timestamp;
+}
+
+public class User{
+	String firstName;
+	String lastName;
+}
+
+public class ChatWindow{
+	ArrayList<Message> messages;
+	public void showMessage(){}
+}
+
+public class Server{
+	LinkedList<MessageRequest> tasks;
+	while(isFree() && hasRemainingTask()){
+		Worker worker = getWorker();
+		woerker.execute(getTask());
+	}
+	public void getRequest(MessageRequest request){
+		// add to message queue
+	}
+}
