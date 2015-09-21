@@ -1,0 +1,71 @@
+public class UserManager{
+	private static instance = null;
+	private HashMap<Integer, User> usersById;
+	private HashMap<String, User> usersByAccountName;
+	public static UserManager getInstance(){
+		if(instance == null){
+			instance = new UserManager();
+		}
+		return instance;
+	}	
+	private HashMap<Integer, User> onlineUsers;
+	public void approveAddRequest(AddRequest request){
+		User from = request.getFrom();
+		User to = request.getTo();
+		from.add(to);
+		to.add(from);
+	}
+	public void rejectAddRequest(AddRequest request){
+		User from = request.getFrom();
+		User to = requst.getTo();
+		from.remove(to);
+		to.remove(from); 
+	}
+}
+
+public class User{
+	private int id;
+	private Status status;
+	private HashMap<Integer, User> contacts;
+	private HashMap<Integer, PrivateChat> privateChats;
+	private ArrayList<GrpupChat> groupChats;
+	public boolean addFriend(){}
+	public void receiveFriendRequest(){}
+	public void sendFriendRequest(){}
+	public void addConversation(PrivateChat chat){}
+	public void addConversation(GroupChat chat)
+}
+
+public enum Status{
+	IDLE, AWAY, BUSY, OFFLINE 
+}
+
+public abstract class Conversation{
+	private HashMap<User> participants;
+	private ArrayList<Message> messages;
+	public boolean addMessage(){}
+	public ArrayList<Message> getMessage(){}
+}
+
+public class AddRequest{
+	private User from;
+	private User to;
+	private Date date;
+}
+public class PrivateChat extends Conversation{
+	public PrivateChat(User user1, User user2){}
+	public User getOtherParticipant(User primary){
+
+	}
+}
+
+public class GroupChat extends Conversation{
+	public boolean addParticipant(User user){}
+	public boolean removeParticipant(User user){}
+}
+
+public class Message{
+	private String content;
+	private Date date;
+}
+
