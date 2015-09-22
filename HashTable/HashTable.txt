@@ -1,0 +1,43 @@
+// Design and implement hashtable using chaining to handle collisions.
+public class Entry<K, V>{
+	K k;
+	V v;
+	public Entry(K k, V v){
+		this.k = k;
+		this.v = v;
+	}	
+}
+public class HashMap<K, V>{
+	public HashMap<K, V>(){
+		items = new LinkedList<V>[Integer.MAX_VALUE];
+	}
+
+	LinkedList<Entry<K, V>>[] items;
+
+	public void put(K, V){
+		int index = K.hashcode();
+		if(items[index] == null){
+			items[index] = new LinkedList<V>();
+		}
+		for(Entry entry : items[index]){
+			if(entry.k.equals(K)){
+				items[index].remove(entry);
+				break;
+			}
+		}
+		items[index].add(new Entry(K, V));
+	} 	
+
+	public V get(K){
+		int index = K.hashcode();
+		if(items[index] == null){
+			return null;
+		}
+		for(Entry entry : items[index]){
+			if(entry.k.equals(K)){
+				return entry.v;
+			}
+		}
+		return null;
+	}
+}
