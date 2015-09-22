@@ -1,0 +1,100 @@
+// Design the data structure and algorithm for in memory file system.
+// File, Directory, Entry
+public enum Type{
+	DIRECTORY, TXT, PNG, JPG, PDF
+}
+
+public abstract class Entry{
+	protected Directory parent;
+	protected long created;
+	protected long lastUpdated;
+	protected long lastAccessed
+	protected String name;
+	protected String path;
+	protected long size;
+	protected Type type;
+	public Entry(String name, Type type, Directory parent){
+		this.name = name;
+		this.type = type;
+		this.parent = parent;
+	}
+	public void rename(String name){
+		this.name = name;
+	}
+
+	public String getFullPath(){
+		if(parent == null){
+			return name;
+		}else{
+			return parent.getFullPath() + "/" + name;
+		}
+	}
+}
+
+public class File extends Entry{
+	private String content;
+	public File(String name, Type type, Directory directory, int size){
+		super(name, type, directory);
+		this.size = size;
+	}
+	public void setContent(String content){
+		this.content = content;
+	}
+	public String getContent(){
+		return content;
+	}
+}
+
+public class Directory extends Entry{
+	public Directory(String name, Directory parent){
+		super(name, Type.DIRECTORY, parent);
+		entries = new ArrayList<Entry>();
+	}
+
+	public int getNumberOfFiles(){
+		int total = 0;
+		for(Entry entry : entries){
+			if(entry isinstanceof Directory){
+				total ++;
+				Directory directory = (Directory) entry;
+				total += directory.getNumberOfFiles();
+			}else if(entry ininstanceof File){
+				total++;
+			}
+		}
+		return total;
+	}
+
+	public int getSize(){
+		int size = 0;
+		for(Entry entry : entries){
+			size += entry.size();
+		}
+		return size;
+	}
+	private ArrayList<Entry> entries;
+	
+	public void sortByType(){}
+
+	public void sortBySize(){}
+
+	public void sortByName(){}
+
+	public void sortByCreateTime(){}
+
+	public void sortByModifyTime(){}
+
+	public void createEntry(String name, Type type){
+		Entry entry = null;
+		if(type == Type.DIRECTORY){
+			entry = new Directory(name, type, getPath());
+		}else{
+			entry = new File(name, type, getPath());
+		}
+		entries.add(entry);
+	}
+
+	public void removeEntry(Entry entry){
+		entries.remove(entry);
+	}
+}
